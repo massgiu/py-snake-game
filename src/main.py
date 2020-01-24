@@ -7,7 +7,7 @@ from tkinter import messagebox
 
 class cube(object):
     rows = 20
-    w = 0
+    w = 500
 
     def __init__(self, start, dirnx=1, dirny=0, color=(255, 0, 0)):
         self.pos = start  # è una tupla contenente coord x,y
@@ -18,21 +18,23 @@ class cube(object):
     def move_cube(self, dirnx, dirny):
         self.dirnx = dirnx
         self.dirny = dirny
-        self.pos(self.pos[0] + self.dirnx, self.pos[1] + dirny)
+        #move cube
+        self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw_cube(self, surface, eyes=False):
-        dist = self.w //self.rows
-        i = self.pos[0]
-        j = self.pos[1]
-        #coloro il blocchetto
-        pygame.draw.rect(surface,self.color, (i*dist+1,j*dist+1,dist-2,dist-2))
+        dist = self.w // self.rows
+        i = self.pos[0]  # x-coord cube
+        j = self.pos[1]  # y-coord cube
+        # coloro il blocchetto
+        pygame.draw.rect(surface, self.color, (i * dist + 1, j * dist + 1, dist - 2, dist - 2))
         if eyes:
-            centre = dist//2
+            centre = dist // 2
             radius = 3
-            circleMiddle = (i*dist+centre-radius,j*dist+8)
-            circleMiddle2 = (i * dist + dist - radius*2, j * dist + 8)
-            pygame.draw.circle(surface,(0,0,0),circleMiddle,radius)
+            circleMiddle = (i * dist + centre - radius, j * dist + 8)
+            circleMiddle2 = (i * dist + dist - radius * 2, j * dist + 8)
+            pygame.draw.circle(surface, (0, 0, 0), circleMiddle, radius)
             pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)
+
 
 class snake(object):
     body = []  # lista di cube
@@ -43,7 +45,7 @@ class snake(object):
     def __init__(self, color, pos):  # pos: head position
         self.color = color
         self.head = cube(pos)
-        self.body.append(self.head) # We will add head (which is a cube object)
+        self.body.append(self.head)  # We will add head (which is a cube object)
         # inizialmente snake va in basso
         self.dirnx = 0  # assume valori 0,-1,1 (se !=0, altro=0)
         self.dirny = 1  # assume valori 0,-1,1 (se !=0, altro=0)
@@ -56,19 +58,23 @@ class snake(object):
 
             keys = pygame.key.get_pressed()
             for key in keys:
-                if key[pygame.K_LEFT]:
+                if keys[pygame.K_LEFT]:
                     self.dirnx = -1
                     self.dirny = 0
-                elif key[pygame.K_RIGHT]:
+                    print("Left")
+                elif keys[pygame.K_RIGHT]:
                     self.dirnx = 1
                     self.dirny = 0
-                elif key[pygame.K_UP]:
+                    print("Right")
+                elif keys[pygame.K_UP]:
                     self.dirnx = 0
                     self.dirny = -1
-                elif key[pygame.K_DOWN]:
+                    print("Up")
+                elif keys[pygame.K_DOWN]:
                     self.dirnx = 0
                     self.dirny = 1
-                # All'atto della rotazione devo memorizzare la pos della testa
+                    print("Down")
+                # All'atto della rotazione devo memorizzare la direzione
                 # Come chiave la posizione della testa
                 # come valore metto la direzione
                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
@@ -93,12 +99,13 @@ class snake(object):
                 # se la direz è dx e la pos_x è al termine => riporto la x allo 0
                 elif cub.dirnx == 1 and cub.pos[0] >= cub.rows - 1:
                     cub.pos = (0, cub.pos[1])
-                # se la direz è down e la pos_y è al termine => riporto la y allo 0
-                elif cub.dirnx == 1 and cub.pos[1] >= cub.rows - 1:
+                # se la direz y è down e la pos_y è al termine => riporto la y allo 0
+                elif cub.dirny == 1 and cub.pos[1] >= cub.rows - 1:
                     cub.pos = (cub.pos[0], 0)
-                elif cub.dirnx == -1 and cub.pos[1] <= 0:
+                # se la direz y è up e la pos_y è al termine => riporto la y al termine
+                elif cub.dirny == -1 and cub.pos[1] <= 0:
                     cub.pos = (cub.pos[0], cub.rows - 1)
-                else: # If we haven't reached the edge just move in our current direction
+                else:  # If we haven't reached the edge just move in our current direction
                     cub.move_cube(cub.dirnx, cub.dirny)
 
     def reset(self):
@@ -107,7 +114,7 @@ class snake(object):
     def addCube(self):
         pass
 
-    #Draw every cube of the body
+    # Draw every cube of the body
     def draw(self, surface):
         for index, cub in enumerate(self.body):
             if index == 0:  # this is head, we need to draw eyes
@@ -129,15 +136,16 @@ def drawGrid(width, rows, surface):
         # Horizontal line
         pygame.draw.line(surface, (255, 255, 255), (0, y), (width, y))
 
-#Update display
+
+# Update display
 def redrawWindow(surface):
-    global rows, width, sn
-    surface.fill((0, 0, 0)) # Fills the screen with black
-    sn.draw(surface)
-    drawGrid(width, rows, surface) # Will draw our grid lines
-    pygame.display.update() # Updates the screen
+    global rows, width, snk
+    surface.fill((0, 0, 0))  # Fills the screen with black
+    snk.draw(surface)
+    drawGrid(width, rows, surface)  # Will draw our grid lines
+    pygame.display.update()  # Updates the screen
 
-
+# This function generates a random cube to eat
 def randomSnake(rows, items):
     pass
 
@@ -147,20 +155,21 @@ def message_box(subject, content):
 
 
 def main():
-    global rows, width, sn
-    width = 500 # Width of our screen
-    rows = 20 # Amount of rows
+    global rows, width, snk
+    width = 500  # Width of our screen
+    rows = 20  # Amount of rows
     win = pygame.display.set_mode((width, width))
     snake_color = (255, 0, 0)
     snake_pos = (10, 10)
-    sn = snake(snake_color, snake_pos)
+    snk = snake(snake_color, snake_pos)
     flag = True
     clock = pygame.time.Clock()  # create an object to help track time
     while flag:
         # pause the program for an amount of time
         pygame.time.delay(50)  # se diminuisce, va più veloce
         clock.tick(10)  # se diminuisce, va più lento
-
+        snk.move()
         redrawWindow(win)
+
 
 main()
