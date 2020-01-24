@@ -18,7 +18,7 @@ class cube(object):
     def move_cube(self, dirnx, dirny):
         self.dirnx = dirnx
         self.dirny = dirny
-        #move cube
+        # move cube
         self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw_cube(self, surface, eyes=False):
@@ -37,7 +37,7 @@ class cube(object):
 
 
 class snake(object):
-    body = []  # lista di cube
+    body_list = []  # lista di cube
     # Si tratta di un dizionario i cui elementi sono creati
     # nel momento in cui vi è una rotazione
     turns = {}
@@ -45,7 +45,7 @@ class snake(object):
     def __init__(self, color, pos):  # pos: head position
         self.color = color
         self.head = cube(pos)
-        self.body.append(self.head)  # We will add head (which is a cube object)
+        self.body_list.append(self.head)  # We will add head (which is a cube object)
         # inizialmente snake va in basso
         self.dirnx = 0  # assume valori 0,-1,1 (se !=0, altro=0)
         self.dirny = 1  # assume valori 0,-1,1 (se !=0, altro=0)
@@ -61,26 +61,22 @@ class snake(object):
                 if keys[pygame.K_LEFT]:
                     self.dirnx = -1
                     self.dirny = 0
-                    print("Left")
                 elif keys[pygame.K_RIGHT]:
                     self.dirnx = 1
                     self.dirny = 0
-                    print("Right")
                 elif keys[pygame.K_UP]:
                     self.dirnx = 0
                     self.dirny = -1
-                    print("Up")
                 elif keys[pygame.K_DOWN]:
                     self.dirnx = 0
                     self.dirny = 1
-                    print("Down")
                 # All'atto della rotazione devo memorizzare la direzione
                 # Come chiave la posizione della testa
                 # come valore metto la direzione
                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
         # Implemento il movimento del serpente
-        for index, cub in enumerate(self.body):  # body è una lista di cube
+        for index, cub in enumerate(self.body_list):  # body è una lista di cube
             # per ciascun blocchetto del body prendo la tupla della posizione (x,y)
             p = cub.pos[:]
             # se la posizione del blocchetto coincide con quella in cui
@@ -90,7 +86,7 @@ class snake(object):
                 # per ogni blocchetto del body chiamo il metodo move()
                 cub.move_cube(turn[0], turn[1])  # turn[0]=direzX, turn[1]=direzY
                 # se è l'ultimo cubo lo rimuovo
-                if index == len(self.body) - 1:
+                if index == len(self.body_list) - 1:
                     self.turns.pop(p)
             else:
                 # se la direz è sx e la pos_x<0 => riporto la x all'estremo dx
@@ -108,15 +104,37 @@ class snake(object):
                 else:  # If we haven't reached the edge just move in our current direction
                     cub.move_cube(cub.dirnx, cub.dirny)
 
-    def reset(self):
-        pass
+    def reset(self, pos):
+        self.head = cube(pos)
+        self.body_list = []
+        self.body_list.append(self.head)
+        self.turns = {}  # lista delle rotazioni
+        self.dirnx = 0
+        self.dirny = 1
 
     def addCube(self):
-        pass
+        tail = self.body_list[-1]
+        dx, dy = tail.dirnx, tail.dirny
+
+        # We need to know which side of the snake to add the cube to.
+        # So we check what direction we are currently moving in to determine if we
+        # need to add the cube to the left, right, above or below.
+        if dx == 1 and dy == 0:  # going right (x-1, same y)
+            self.body_list.append(cube((tail.pos[0] - 1, tail.pos[1])))
+        elif dx == -1 and dy == 0:  # going left (x+1, same y)
+            self.body_list.append(cube((tail.pos[0] + 1, tail.pos[1])))
+        elif dx == 0 and dy == 1:  # going down (same x, y-1)
+            self.body_list.append(cube((tail.pos[0], tail.pos[1] - 1)))
+        elif dx == 0 and dy == -1:  # going up (same x, y+1)
+            self.body_list.append(cube((tail.pos[0], tail.pos[1] + 1)))
+
+        # We then set the cubes direction to the direction of the snake.
+        self.body_list[-1].dirnx = dx
+        self.body_list[-1].dirny = dy
 
     # Draw every cube of the body
     def draw(self, surface):
-        for index, cub in enumerate(self.body):
+        for index, cub in enumerate(self.body_list):
             if index == 0:  # this is head, we need to draw eyes
                 cub.draw_cube(surface, True)
             else:
@@ -138,30 +156,57 @@ def drawGrid(width, rows, surface):
 
 
 # Update display
-def redrawWindow(surface):
-    global rows, width, snk
+def redrawWindow(surface, rows, width, snk, cookye):
     surface.fill((0, 0, 0))  # Fills the screen with black
     snk.draw(surface)
+    cookye.draw_cube(surface)
     drawGrid(width, rows, surface)  # Will draw our grid lines
     pygame.display.update()  # Updates the screen
 
-# This function generates a random cube to eat
-def randomSnake(rows, items):
-    pass
+
+# This function generates the coordinates x,y for a random cube to eat
+def randomSnack(rows, snk):
+    while True:  # Keep generating random positions until we get a valid one
+        x = random.randrange(rows)
+        y = random.randrange(rows)
+        position_list = list(map(lambda z: z.pos, snk.body_list))
+        if (x,y) in position_list: # This wll check if the position we generated is occupied by the snake
+            continue
+        else:
+            break
+
+    return (x, y)
 
 
 def message_box(subject, content):
-    pass
+    root = tk.Tk()
+    root.attributes("-topmost", True)
+    root.withdraw()
+    messagebox.showinfo(subject, content)
+    try:
+        root.destroy()
+    except:
+        pass
+
+
+def checkCrossing(snake):
+    for x in range(len(snake.body_list)):
+        # Check if snake head overlaps with its body
+        if snake.body_list[0].pos in list(map(lambda z: z.pos, snake.body_list[1:])):
+            print('Score: ', len(snake.body_list))
+            message_box('You Lost!', 'Play again...')
+            snake.reset((10, 10))
+            True
 
 
 def main():
-    global rows, width, snk
     width = 500  # Width of our screen
     rows = 20  # Amount of rows
     win = pygame.display.set_mode((width, width))
     snake_color = (255, 0, 0)
     snake_pos = (10, 10)
     snk = snake(snake_color, snake_pos)
+    cookie = cube(randomSnack(rows, snk), color=(0, 255, 0))
     flag = True
     clock = pygame.time.Clock()  # create an object to help track time
     while flag:
@@ -169,7 +214,11 @@ def main():
         pygame.time.delay(50)  # se diminuisce, va più veloce
         clock.tick(10)  # se diminuisce, va più lento
         snk.move()
-        redrawWindow(win)
+        if checkCrossing(snk): break
+        if snk.body_list[0].pos == cookie.pos:  # Checks if the head collides with the cookie
+            snk.addCube()  # Adds a new cube to the snake
+            cookie = cube(randomSnack(rows, snk), color=(0, 255, 0))  # creates a new cube object
+        redrawWindow(win, rows, width, snk, cookie)
 
 
 main()
