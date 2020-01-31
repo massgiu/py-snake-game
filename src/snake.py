@@ -23,16 +23,16 @@ class Snake(object):
 
             keys = pygame.key.get_pressed()
             for key in keys:
-                if keys[pygame.K_LEFT]:
+                if (keys[pygame.K_LEFT] and self.dirnx !=1 and len(self.body_list)>1) or (keys[pygame.K_LEFT] and len(self.body_list)==1):
                     self.dirnx = -1
                     self.dirny = 0
-                elif keys[pygame.K_RIGHT]:
+                elif (keys[pygame.K_RIGHT] and self.dirnx !=-1 and len(self.body_list)>1) or (keys[pygame.K_RIGHT] and len(self.body_list)==1):
                     self.dirnx = 1
                     self.dirny = 0
-                elif keys[pygame.K_UP]:
+                elif (keys[pygame.K_UP] and self.dirny !=1 and len(self.body_list)>1) or (keys[pygame.K_UP] and len(self.body_list)==1):
                     self.dirnx = 0
                     self.dirny = -1
-                elif keys[pygame.K_DOWN]:
+                elif (keys[pygame.K_DOWN] and self.dirny !=-1 and len(self.body_list)>1) or (keys[pygame.K_DOWN] and len(self.body_list)==1):
                     self.dirnx = 0
                     self.dirny = 1
                 # All'atto della rotazione devo memorizzare la direzione
@@ -47,7 +47,7 @@ class Snake(object):
             # se la posizione del blocchetto coincide con quella in cui
             # è avvenuta la rotazione della testa
             if p in self.turns:
-                turn = self.turns[p]  # prendo la posizione di rotaz dal dizion
+                turn = self.turns[p]  # prendo la direzione di rotaz dal dizion
                 # per ogni blocchetto del body chiamo il metodo move()
                 cub.move_cube(turn[0], turn[1])  # turn[0]=direzX, turn[1]=direzY
                 # se è l'ultimo cubo lo rimuovo
