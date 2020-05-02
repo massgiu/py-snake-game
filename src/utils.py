@@ -1,5 +1,4 @@
 import pygame
-import math
 import random
 import tkinter as tk
 from tkinter import messagebox
@@ -15,9 +14,9 @@ class Utils(object):
             x = x + sizeBwn
             y = y + sizeBwn
             # Vertical line
-            pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, width))
+            pygame.draw.line(surface, (128, 128, 128), (x, 0), (x, width))
             # Horizontal line
-            pygame.draw.line(surface, (255, 255, 255), (0, y), (width, y))
+            pygame.draw.line(surface, (128, 128, 128), (0, y), (width, y))
 
     # Update display
     def redrawWindow(self, surface, rows, width, snk, cookye):
@@ -32,6 +31,7 @@ class Utils(object):
         while True:  # Keep generating random positions until we get a valid one
             x = random.randrange(rows)
             y = random.randrange(rows)
+            # get a list with all position of snake's cube
             position_list = list(map(lambda z: z.pos, snk.body_list))
             if (x, y) in position_list:  # This wll check if the position we generated is occupied by the snake
                 continue
