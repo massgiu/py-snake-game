@@ -1,10 +1,9 @@
 import pygame
-from src.cube import Cube
+from src.Cube import Cube
 
 class Snake(object):
     body_list = []  # lista di cube
-    # Si tratta di un dizionario i cui elementi sono creati
-    # nel momento in cui vi è una rotazione
+    # Dictionary that stores tuple about point of rotations
     turns = {}
 
     def __init__(self, color, pos):  # pos: head position
@@ -56,16 +55,16 @@ class Snake(object):
             else:
                 # se la direz è sx e la pos_x<0 => riporto la x all'estremo dx
                 if cub.dirnx == -1 and cub.pos[0] <= 0:
-                    cub.pos = (cub.rows - 1, cub.pos[1])
+                    cub.pos = (cub.ROWS - 1, cub.pos[1])
                 # se la direz è dx e la pos_x è al termine => riporto la x allo 0
-                elif cub.dirnx == 1 and cub.pos[0] >= cub.rows - 1:
+                elif cub.dirnx == 1 and cub.pos[0] >= cub.ROWS - 1:
                     cub.pos = (0, cub.pos[1])
                 # se la direz y è down e la pos_y è al termine => riporto la y allo 0
-                elif cub.dirny == 1 and cub.pos[1] >= cub.rows - 1:
+                elif cub.dirny == 1 and cub.pos[1] >= cub.ROWS - 1:
                     cub.pos = (cub.pos[0], 0)
                 # se la direz y è up e la pos_y è al termine => riporto la y al termine
                 elif cub.dirny == -1 and cub.pos[1] <= 0:
-                    cub.pos = (cub.pos[0], cub.rows - 1)
+                    cub.pos = (cub.pos[0], cub.ROWS - 1)
                 else:  # If we haven't reached the edge just move in our current direction
                     cub.move_cube(cub.dirnx, cub.dirny)
 

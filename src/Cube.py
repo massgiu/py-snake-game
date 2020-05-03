@@ -1,8 +1,9 @@
 import pygame
 
 class Cube(object):
-    rows = 20
-    w = 500
+    ROWS = 20
+    WIDTH = 500
+
 
     def __init__(self, initial_pos, dirnx=1, dirny=0, color=(255, 0, 0)):
         self.pos = initial_pos  # è una tupla contenente coord x,y
@@ -17,7 +18,7 @@ class Cube(object):
         self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw_cube(self, surface, eyes=False):
-        dist = self.w // self.rows
+        dist = self.WIDTH // self.ROWS
         i = self.pos[0]  # x-coord cube
         j = self.pos[1]  # y-coord cube
         # coloro il blocchetto
