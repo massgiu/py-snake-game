@@ -5,7 +5,8 @@ from tkinter import messagebox
 
 class Utils(object):
 
-    def drawGrid(self, width, rows, surface):
+    @staticmethod
+    def drawGrid(width, rows, surface):
         sizeBwn = width // rows
 
         x = 0
@@ -19,15 +20,17 @@ class Utils(object):
             pygame.draw.line(surface, (128, 128, 128), (0, y), (width, y))
 
     # Update display
-    def redrawWindow(self, surface, rows, width, snk, cookye):
+    @staticmethod
+    def redrawWindow(surface, rows, width, snk, cookye):
         surface.fill((0, 0, 0))  # Fills the screen with black
         snk.draw(surface)
         cookye.draw_cube(surface)
-        self.drawGrid(width, rows, surface)  # Will draw our grid lines
+        Utils.drawGrid(width, rows, surface)  # Will draw our grid lines
         pygame.display.update()  # Updates the screen
 
     # This function generates the coordinates x,y for a random cube to eat
-    def randomSnack(self, rows, snk):
+    @staticmethod
+    def randomSnack(rows, snk):
         while True:  # Keep generating random positions until we get a valid one
             x = random.randrange(rows)
             y = random.randrange(rows)
@@ -40,7 +43,8 @@ class Utils(object):
 
         return (x, y)
 
-    def message_box(self, subject, content):
+    @staticmethod
+    def message_box(subject, content):
         root = tk.Tk()
         root.attributes("-topmost", True)
         root.withdraw()
@@ -50,7 +54,8 @@ class Utils(object):
         except:
             pass
 
-    def checkCrossing(self, snake):
+    @staticmethod
+    def checkCrossing(snake):
         for x in range(len(snake.body_list)):
             # Check if snake head overlaps with its body
             if snake.body_list[0].pos in list(map(lambda z: z.pos, snake.body_list[1:])):
