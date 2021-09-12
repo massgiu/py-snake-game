@@ -60,7 +60,7 @@ class Utils(object):
             # Check if snake head overlaps with its body
             if snake.body_list[0].pos in list(map(lambda z: z.pos, snake.body_list[1:])):
                 print('Your score is: ', len(snake.body_list))
-                messagebox.showinfo('You Lost!', 'Play again...')
+                Utils.message_box('You Lost!', 'Play again...')
                 snake.reset((10, 10))
                 True
 
