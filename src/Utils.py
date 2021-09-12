@@ -21,10 +21,10 @@ class Utils(object):
 
     # Update display
     @staticmethod
-    def redrawWindow(surface, rows, width, snk, cookye):
+    def redrawWindow(surface, rows, width, snk, cookie):
         surface.fill((0, 0, 0))  # Fills the screen with black
         snk.draw(surface)
-        cookye.draw_cube(surface)
+        cookie.draw_cube(surface)
         Utils.drawGrid(width, rows, surface)  # Will draw our grid lines
         pygame.display.update()  # Updates the screen
 
@@ -59,8 +59,8 @@ class Utils(object):
         for x in range(len(snake.body_list)):
             # Check if snake head overlaps with its body
             if snake.body_list[0].pos in list(map(lambda z: z.pos, snake.body_list[1:])):
-                print('Score: ', len(snake.body_list))
-                self.message_box('You Lost!', 'Play again...')
-                self.reset((10, 10))
+                print('Your score is: ', len(snake.body_list))
+                messagebox.showinfo('You Lost!', 'Play again...')
+                snake.reset((10, 10))
                 True
 

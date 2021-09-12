@@ -9,7 +9,7 @@ def main():
     # rows = 20  # Amount of rows
     win = pygame.display.set_mode((Cube.WIDTH, Cube.WIDTH))
 
-    snake_color = (255, 0, 0)
+    snake_color = (255, 0, 0) #tuple
     snake_pos = (10, 10)
     snk = Snake(snake_color, snake_pos)
     cookie = Cube(Utils.randomSnack(Cube.ROWS, snk), color=(0, 255, 0))
@@ -17,7 +17,7 @@ def main():
     clock = pygame.time.Clock()  # create an object to help track time
     while flag:
         # pause the program for an amount of time
-        pygame.time.delay(50)  # if increases, then goes quicker
+        pygame.time.delay(40)  # if increases, then goes quicker
         clock.tick(10)  # if decreases, then goes slower
         snk.move()
         if Utils.checkCrossing(snk): break
