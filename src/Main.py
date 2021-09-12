@@ -17,11 +17,11 @@ def main():
     clock = pygame.time.Clock()  # create an object to help track time
     while flag:
         # pause the program for an amount of time
-        pygame.time.delay(50)  # se diminuisce, va più veloce
-        clock.tick(10)  # se diminuisce, va più lento
+        pygame.time.delay(50)  # if increases, then goes quicker
+        clock.tick(10)  # if decreases, then goes slower
         snk.move()
         if Utils.checkCrossing(snk): break
-        if snk.body_list[0].pos == cookie.pos:  # Checks if the head collides with the cookie
+        if snk.body_list[0].pos == cookie.pos:  # Checks if the head collides with cookie
             snk.addCube()  # Adds a new cube to the snake
             cookie = Cube(Utils.randomSnack(Cube.ROWS, snk), color=(0, 255, 0))  # creates a new cube object
         Utils.redrawWindow(win, Cube.ROWS, Cube.WIDTH, snk, cookie)
