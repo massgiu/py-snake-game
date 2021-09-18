@@ -3,18 +3,20 @@ import random
 import tkinter as tk
 from tkinter import messagebox
 
+from src.Constants import Constants
+
 
 class Utils(object):
 
     @staticmethod
     def drawGrid(width, rows, surface):
-        sizeBwn = width // rows
+        size_square = width // rows
         color_line = (128, 128, 128)
         x = 0
         y = 0
         for l in range(rows):
-            x = x + sizeBwn
-            y = y + sizeBwn
+            x = x + size_square
+            y = y + size_square
             # Vertical line
             pygame.draw.line(surface, color_line, (x, 0), (x, width))
             # Horizontal line
@@ -71,6 +73,6 @@ class Utils(object):
     def you_lost(cls, snake):
         print('Your score is: ', len(snake.body_list))
         Utils.message_box('You Lost!', 'Play again...')
-        snake.reset((10, 10))
+        snake.__init__(Constants.SNAKE_COLOR, Constants.INITIAL_SNAKE_POS)
         pygame.display.update()
 

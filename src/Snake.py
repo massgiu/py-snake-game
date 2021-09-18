@@ -3,16 +3,16 @@ from src.Cube import Cube
 from src.Constants import  Constants
 
 class Snake(object):
-    body_list = []  # lista di cube
-    # Dictionary that stores tuple about point of rotations
-    turns = {}
+    #body_list = []  # lista di cube
 
     def __init__(self, color, pos):  # pos: head position
         self.color = color
         self.head = Cube(pos)
-        self.body_list.append(self.head)  # We will add head (which is a cube object)
+        self.body_list= [self.head]  # We will add head (which is a cube object)
         # inizialmente snake va in basso
         self.direction = "DOWN"
+        # Dictionary that stores tuple about point of rotations
+        self.turns = {}
 
     def move(self):
         # Gestore di eventi: intercetto eventi tastiera
@@ -69,13 +69,6 @@ class Snake(object):
                     cub.pos = (cub.pos[0], Constants.ROWS - 1)
                 else:  # If we haven't reached the edge just move in our current direction
                     cub.move_cube(cub.direction)
-
-    def reset(self, pos):
-        self.head = Cube(pos)
-        self.body_list = []
-        self.body_list.append(self.head)
-        self.turns = {}  # lista delle rotazioni
-        self.direction = "DOWN"
 
     def addCube(self):
         tail = self.body_list[-1]
