@@ -1,24 +1,33 @@
 import pygame
+from src.Constants import Constants
 
 class Cube(object):
-    ROWS = 20
-    WIDTH = 500
 
-
-    def __init__(self, initial_pos, dirnx=1, dirny=0, color=(255, 0, 0)):
+    def __init__(self, initial_pos, direction="DOWN", color=(255, 0, 0)):
         self.pos = initial_pos  # è una tupla contenente coord x,y
-        self.dirnx = dirnx
-        self.dirny = dirny
+        #self.dirnx = dirnx
+        #self.dirny = dirny
+        self.direction = direction
         self.color = color
 
-    def move_cube(self, dirnx, dirny):
-        self.dirnx = dirnx
-        self.dirny = dirny
+    def move_cube(self, direction):
+        #self.dirnx = dirnx
+        #self.dirny = dirny
+        self.direction = direction
         # move cube
-        self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
+        dx, dy = 0, 0
+        if direction == "UP":
+            dy = -1
+        if direction == "DOWN":
+            dy = 1
+        if direction == "RIGHT":
+            dx = 1
+        if direction == "LEFT":
+            dx = -1
+        self.pos = (self.pos[0]+dx, self.pos[1]+dy)
 
     def draw_cube(self, surface, eyes=False):
-        dist = self.WIDTH // self.ROWS
+        dist = Constants.WIDTH // Constants.ROWS
         i = self.pos[0]  # x-coord cube
         j = self.pos[1]  # y-coord cube
         # coloro il blocchetto

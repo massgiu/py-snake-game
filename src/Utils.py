@@ -3,21 +3,22 @@ import random
 import tkinter as tk
 from tkinter import messagebox
 
+
 class Utils(object):
 
     @staticmethod
     def drawGrid(width, rows, surface):
         sizeBwn = width // rows
-
+        color_line = (128, 128, 128)
         x = 0
         y = 0
         for l in range(rows):
             x = x + sizeBwn
             y = y + sizeBwn
             # Vertical line
-            pygame.draw.line(surface, (128, 128, 128), (x, 0), (x, width))
+            pygame.draw.line(surface, color_line, (x, 0), (x, width))
             # Horizontal line
-            pygame.draw.line(surface, (128, 128, 128), (0, y), (width, y))
+            pygame.draw.line(surface, color_line, (0, y), (width, y))
 
     # Update display
     @staticmethod
@@ -41,7 +42,7 @@ class Utils(object):
             else:
                 break
 
-        return (x, y)
+        return x, y
 
     @staticmethod
     def message_box(subject, content):
@@ -55,12 +56,21 @@ class Utils(object):
             pass
 
     @staticmethod
-    def checkCrossing(snake):
+    def check_crossing(snake, cookie):
         for x in range(len(snake.body_list)):
             # Check if snake head overlaps with its body
             if snake.body_list[0].pos in list(map(lambda z: z.pos, snake.body_list[1:])):
-                print('Your score is: ', len(snake.body_list))
-                Utils.message_box('You Lost!', 'Play again...')
-                snake.reset((10, 10))
-                True
+                Utils.you_lost(snake)
+            #eat cookie
+            if snake.body_list[0].pos == cookie.pos:  # Checks if the head collides with cookie
+                snake.addCube()  # Adds a new cube to the snake
+                cookie.__init__(snake)# creates a new cube object
+
+
+    @classmethod
+    def you_lost(cls, snake):
+        print('Your score is: ', len(snake.body_list))
+        Utils.message_box('You Lost!', 'Play again...')
+        snake.reset((10, 10))
+        pygame.display.update()
 
