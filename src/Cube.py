@@ -1,6 +1,7 @@
 import pygame
 from src.Constants import Constants
 
+
 class Cube(object):
 
     def __init__(self, initial_pos, direction="DOWN", color=(255, 0, 0)):
@@ -13,25 +14,24 @@ class Cube(object):
         # move cube
         dx, dy = 0, 0
         if direction == "UP":
-            dy = -1
+            dy = - Constants.SIZE_CUBE
         if direction == "DOWN":
-            dy = 1
+            dy = Constants.SIZE_CUBE
         if direction == "RIGHT":
-            dx = 1
+            dx = Constants.SIZE_CUBE
         if direction == "LEFT":
-            dx = -1
-        self.pos = (self.pos[0]+dx, self.pos[1]+dy)
+            dx = - Constants.SIZE_CUBE
+        self.pos = (self.pos[0] + dx, self.pos[1] + dy)
 
     def draw_cube(self, surface, eyes=False):
-        dist = Constants.WIDTH // Constants.ROWS
         x = self.pos[0]  # x-coord cube
         y = self.pos[1]  # y-coord cube
         # coloro il blocchetto
-        pygame.draw.rect(surface, self.color, (x * dist + 1, y * dist + 1, dist - 2, dist - 2))
+        pygame.draw.rect(surface, self.color, (x, y, Constants.SIZE_CUBE, Constants.SIZE_CUBE))
         if eyes:
-            centre = dist // 2
+            centre = Constants.SIZE_CUBE // 2
             radius = 3
-            circleMiddle = (x * dist + centre - radius, y * dist + 8)
-            circleMiddle2 = (x * dist + dist - radius * 2, y * dist + 8)
+            circleMiddle = (x + centre - radius, y + 8)
+            circleMiddle2 = (x + Constants.SIZE_CUBE - radius * 2, y + 8)
             pygame.draw.circle(surface, (0, 0, 0), circleMiddle, radius)
             pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)

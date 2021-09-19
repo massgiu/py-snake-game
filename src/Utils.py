@@ -10,13 +10,12 @@ class Utils(object):
 
     @staticmethod
     def drawGrid(width, rows, surface):
-        size_square = width // rows
         color_line = (128, 128, 128)
         x = 0
         y = 0
         for l in range(rows):
-            x = x + size_square
-            y = y + size_square
+            x = x + Constants.SIZE_CUBE
+            y = y + Constants.SIZE_CUBE
             # Vertical line
             pygame.draw.line(surface, color_line, (x, 0), (x, width))
             # Horizontal line
@@ -33,10 +32,10 @@ class Utils(object):
 
     # This function generates the coordinates x,y for a random cube to eat
     @staticmethod
-    def randomSnack(rows, snk):
+    def random_cookie(snk):
         while True:  # Keep generating random positions until we get a valid one
-            x = random.randrange(rows)
-            y = random.randrange(rows)
+            x = random.randrange(Constants.ROWS) * Constants.SIZE_CUBE
+            y = random.randrange(Constants.ROWS) * Constants.SIZE_CUBE
             # get a list with all position of snake's cube
             position_list = list(map(lambda z: z.pos, snk.body_list))
             if (x, y) in position_list:  # This wll check if the position we generated is occupied by the snake
@@ -73,6 +72,5 @@ class Utils(object):
     def you_lost(cls, snake):
         print('Your score is: ', len(snake.body_list))
         Utils.message_box('You Lost!', 'Play again...')
-        snake.__init__(Constants.SNAKE_COLOR, Constants.INITIAL_SNAKE_POS)
+        snake.__init__(Constants.SNAKE_COLOR)
         pygame.display.update()
-
