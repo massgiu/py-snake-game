@@ -14,13 +14,13 @@ class Cube(object):
         # move cube
         dx, dy = 0, 0
         if direction == "UP":
-            dy = - Constants.SIZE_CUBE
+            dy = -Constants.SIZE_CUBE
         if direction == "DOWN":
             dy = Constants.SIZE_CUBE
         if direction == "RIGHT":
             dx = Constants.SIZE_CUBE
         if direction == "LEFT":
-            dx = - Constants.SIZE_CUBE
+            dx = -Constants.SIZE_CUBE
         self.pos = (self.pos[0] + dx, self.pos[1] + dy)
 
     def draw_cube(self, surface, eyes=False):
@@ -31,7 +31,7 @@ class Cube(object):
         if eyes:
             centre = Constants.SIZE_CUBE // 2
             radius = 3
-            circleMiddle = (x + centre - radius, y + 8)
-            circleMiddle2 = (x + Constants.SIZE_CUBE - radius * 2, y + 8)
-            pygame.draw.circle(surface, (0, 0, 0), circleMiddle, radius)
-            pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)
+            circle_middle = (x + centre - radius, y + 8)
+            circle_middle2 = (x + Constants.SIZE_CUBE - radius * 2, y + 8)
+            pygame.draw.circle(surface, (0, 0, 0), circle_middle, radius)
+            pygame.draw.circle(surface, (0, 0, 0), circle_middle2, radius)

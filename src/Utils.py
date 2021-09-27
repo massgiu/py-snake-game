@@ -9,7 +9,7 @@ from src.Constants import Constants
 class Utils(object):
 
     @staticmethod
-    def drawGrid(width, rows, surface):
+    def draw_grid(width, rows, surface):
         color_line = (128, 128, 128)
         x = 0
         y = 0
@@ -23,11 +23,11 @@ class Utils(object):
 
     # Update display
     @staticmethod
-    def redrawWindow(surface, rows, width, snk, cookie):
+    def redraw_window(surface, snk, cookie):
         surface.fill((0, 0, 0))  # Fills the screen with black
         snk.draw(surface)
         cookie.draw_cube(surface)
-        Utils.drawGrid(width, rows, surface)  # Will draw our grid lines
+        Utils.draw_grid(Constants.WIDTH, Constants.ROWS, surface)  # Will draw our grid lines
         pygame.display.update()  # Updates the screen
 
     # This function generates the coordinates x,y for a random cube to eat
@@ -68,8 +68,8 @@ class Utils(object):
                 cookie.__init__(snake)# creates a new cube object
 
 
-    @classmethod
-    def you_lost(cls, snake):
+    @staticmethod
+    def you_lost(snake):
         print('Your score is: ', len(snake.body_list))
         Utils.message_box('You Lost!', 'Play again...')
         snake.__init__(Constants.SNAKE_COLOR)

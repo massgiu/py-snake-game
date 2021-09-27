@@ -1,6 +1,7 @@
 class Constants:
 
     ROWS = 20
+    COLS = ROWS
     WIDTH = 500
     SIZE_CUBE = WIDTH // ROWS
     INITIAL_SNAKE_POS = 10*SIZE_CUBE, 10*SIZE_CUBE

@@ -1,4 +1,5 @@
 import pygame
+
 from src.Cookie import Cookie
 from src.Snake import Snake
 from src.Utils import Utils
@@ -16,10 +17,10 @@ def main():
     while flag:
         # pause the program for an amount of time
         pygame.time.delay(90)
-        # clock.tick(60) # Now your game will be capped at FPS fps
+        # clock.tick(FPS) # game will be capped at FPS fps
         snake.move()
         Utils.check_crossing(snake, cookie)
-        Utils.redrawWindow(win, Constants.ROWS, Constants.WIDTH, snake, cookie)
+        Utils.redraw_window(win, snake, cookie)
 
 
 if __name__ == '__main__':
